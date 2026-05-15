@@ -3,4 +3,6 @@
 
 [Introduction](introduction/README.md)
 
-[Contributing](contributing/README.md)
+[Code of conduct](code-of-conduct/README.md)
+
+[Contributing to the project](contributing/README.md)
