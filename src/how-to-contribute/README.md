@@ -125,6 +125,11 @@ Delete the branch after a successfull merge. This should encourage that a new br
 
 Also, reminding to the authors of the `Pull Request`, to update their master branch before doing a new branch, is always a nice idea.
 
+Please, before merging any pull requests, do make sure that the server is online, otherwise no synchronization is possible and your changes will not make it to the live application.
+
+> Note that the Clavis Aethiopica listing can be accessed also when the server is offline, at
+[https://betamasaheft.uni-hamburg.de/texts/clavisaethiopica.html](https://betamasaheft.uni-hamburg.de/texts/clavisaethiopica.html) and, with records accessible at [https://cae.ethiopicist.com/](https://cae.ethiopicist.com/).
+
 
 ## Links to external documentation
 
