@@ -181,3 +181,14 @@ Note: Some XQuery files using eXist-db specific update syntax (e.g., `update ins
 * Keywords;
 
 * Paratexts.
+
+
+## Aggregated indexes (or registers) generated from data
+
+The term `register` is here used in the sense of the German word `Register`, which is a aggregation of two or more indexes. Example of an aggregated index: [Register der Fundorte fuer Telemann Werkverzeichnis](https://adwmainz.pages.gitlab.rlp.net/nfdi4culture/cdmd/telemann-indexes/peritext/registers/institutions/index.html).
+
+The BetaMasaHeft web application geatures the follwing combined indexes:
+
+* **Manuscripts**, which presents the manuscriots by holding institutions, [https://betamasaheft.eu/manuscripts/browse](https://betamasaheft.eu/manuscripts/browse).
+
+* 
