@@ -1,26 +1,165 @@
 # Developer Workflows
 
 
-## Setting up a virtual machine for the eXist web applications
+## How to migrate BetaMasaHeft to a new server
+
+
+### Set up a virtual machine
 
 For setting up Nginx, one has to use these [configuration files](https://github.com/BetaMasaheft/jinntec/tree/main/nginx), and for setting up eXist-db, one has to use this [configuration file](https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml).
 
 
-## Docker deployments
+### Set up eXist-db
 
-Docker is used to bake an image of BetMas in two stages. First, an `expansion` routine is used to
-transform data: references are resolved into absolute references, etc. In a second stage, the
-application is installed to the latest version in this repository.
+Pull and run the image:
+
+```bash
+sudo docker pull ghcr.io/betamasaheft/betamasaheft:release-expanded
+
+sudo docker run -dit -p 8080:8080 -p 8443:8443 --name betamasa ghcr.io/betamasaheft/betamasaheft:release-expanded
+```
 
 
-### Building the Docker Image
+### Set up the other web services
 
-The Docker image is automatically built and pushed to GitHub Container Registry (GHCR) via CI when:
-- Code is pushed to the `master` or `main` branch
-- The workflow is manually triggered via GitHub Actions
+CollateX:
 
-The image tag format is `{EXISTDB_VERSION}-manuscript-expanded`, where `EXISTDB_VERSION` matches the eXist-db version in the base image (default: `6.4.0`).
+```bash
+sudo docker pull ghcr.io/betamasaheft/collatex-service
 
+sudo docker run -dit -p 8080:8080 -p 8443:8443 --name collatex-service docker pull ghcr.io/betamasaheft/collatex-service
+```
+
+IIIF:
+
+```bash
+sudo docker pull iipsrv/iipsrv
+
+sudo docker run -it -p 9000:9000 -p 8080:80 -v /home/images/:/images iipsrv/iipsrv
+```
+
+SPARQL (see the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)):
+
+```bash
+sudo docker pull adfreiburg/qlever
+
+sudo docker run -it -p 8888:8888 -v /home/triples/:/triples adfreiburg/qlever
+```
+
+
+### Loading the data
+
+#### The XML data
+
+#### The images
+
+#### The RDF data
+
+
+<!-- This is no longer true -->
+Most data is on GitHub, except expanded data, lists and Dillmann
+
+### Loading application
+
+ * Take the apps from latest production. there might have been changes
+   * Use eXide Application/Download app for the following items:
+	 * /db/apps/BetMas
+	 * /db/apps/BetMasApi
+	 * /db/apps/BetMasService
+	 * /db/apps/BetMasWeb
+	 * /db/apps/DillmannData
+	 * /db/apps/EthioStudies
+	 * /db/apps/alpheiosannotations
+	 * /db/apps/gez-en
+	 * /db/apps/guidelines
+	 * /db/apps/lists
+	 * /db/apps/parser
+   * Extract and place into [BetMas](https://github.com/BetaMasaheft/BetMas)
+   * Rebase fixing commits over it: [BetMas#exist-6.x](https://github.com/BetaMasaheft/BetMas/tree/exist-6.x)
+ * Deploy the apps
+     * Tuttle
+ 	 * BetMas
+	 * BetMasApi
+	 * BetMasService
+	 * BetMasWeb
+	 * BetMasInit
+	 * EthioStudies
+	 * alpheiosannotations
+	 * DillmannData
+	 * Dillmann
+	 * Schema
+	 * guidelines (data)
+	 * guidelinesApp
+	 * lists
+	 * parser
+
+ * Update app url
+   * edit /db/apps/BetMasWeb/modules/loc.xqm to read the correct app url
+ * Register RestXQ stuff:
+   * call `/db/apps/BetMasService/modules/registerRESTXQ.xql`
+   * http://116.202.114.60:8081/exist/apps/BetMasService/modules/registerRESTXQ.xql
+
+### Loading data
+
+Take and deploy from GitHub:
+
+ * [authority-files](https://github.com/BetaMasaheft/authority-files)
+ * [corpora](https://github.com/BetaMasaheft/corpora)
+ * [institutions](https://github.com/BetaMasaheft/institutions)
+ * [manuscripts](https://github.com/BetaMasaheft/manuscripts)
+ * [narratives](https://github.com/BetaMasaheft/narrative)
+ * [persons](https://github.com/BetaMasaheft/persons)
+ * [places](https://github.com/BetaMasaheft/places)
+ * [studies](https://github.com/BetaMasaheft/studies)
+ * [works](https://github.com/BetaMasaheft/works)
+
+**Chojnacki does not seem to be used in the end!** VERIFY THO
+
+
+### Install additional things
+
+* At least https://iipimage.sourceforge.io/ is used in production now to host IIIF images
+
+### Loading expanded content
+
+Expanded content is too large to download through the normal way. Instead, it needs to be downloaded through exide. This XQuery script can do that:
+
+```xquery
+xquery version "3.1";
+
+let $file-system-target-base-directory :=
+    '/media/add/expanded-data-dump'
+let $source-collection := '/db/apps/expanded'
+for $doc in collection($source-collection)
+let $target :=
+    (: Put the files into a corresponding directory in the file system :)
+    concat($file-system-target-base-directory, replace(base-uri($doc), '/', '\\'))
+return
+    file:serialize($doc, $target, ("omit-xml-declaration=yes", "indent=yes", "expand-xinclude=false"))
+```
+
+After that, rsync it to local:
+
+```
+scp -r bmadmin@betamasaheft2.aai.uni-hamburg.de:/media/add/expanded-data-dump/expanded-data-dump .
+```
+
+Finally deploy it:
+
+```
+deploy-expanded.sh
+```
+
+### Indexing
+
+Touch /db/apps/expanded/collection.xconf
+
+## Permissions
+
+Fix the permissons for everything in `/db/apps/lists`. They need to be world-writable.
+
+
+## To analyze what is below ================================================
 
 #### Local Build
 
@@ -72,12 +211,6 @@ docker buildx build \
 
 #### Pulling the Image
 
-Pull the pre-built image from GHCR:
-```bash
-docker pull ghcr.io/betamasaheft/betamasaheft:6.4.0-manuscript-expanded
-```
-
-
 #### Running the container locally
 
 ```bash
@@ -89,12 +222,6 @@ docker run -d \
 ```
 
 The application will be available at [http://localhost:8080/exist/apps/BetMasWeb](http://localhost:8080/exist/apps/BetMasWeb).
-
-#### Running the container on the production server
-
-```bash
-docker run -dit -p 8080:8080 ghcr.io/betamasaheft/betamasaheft:release-expanded
-```
 
 
 ## CI Build Process
