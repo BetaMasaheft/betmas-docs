@@ -6,12 +6,19 @@
 
 ### Set up a virtual machine
 
-For setting up Nginx, one has to use these [configuration files](https://github.com/BetaMasaheft/jinntec/tree/main/nginx), and for setting up eXist-db, one has to use this [configuration file](https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml).
+Tje configuration files are as follows: [Nginx](https://github.com/BetaMasaheft/jinntec/tree/main/nginx), and  [eXist-db](https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml).
+
+Ideally, all the software needed is installed as Docker containers.
 
 
-### Set up eXist-db
+### Nginx
 
-Pull and run the image:
+We need a custom made image, with these [configuration files](https://github.com/BetaMasaheft/jinntec/tree/main/nginx). See [https://hub.docker.com/search?q=nginx](https://hub.docker.com/search?q=nginx) for a base image.
+
+
+### eXist-db
+
+Pull the image and run the container:
 
 ```bash
 sudo docker pull ghcr.io/betamasaheft/betamasaheft:release-expanded
@@ -19,10 +26,10 @@ sudo docker pull ghcr.io/betamasaheft/betamasaheft:release-expanded
 sudo docker run -dit -p 8080:8080 -p 8443:8443 --name betamasa ghcr.io/betamasaheft/betamasaheft:release-expanded
 ```
 
+  > We have to make sure that the image contains the `conf.xml` located at [https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml](https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml).
 
-### Set up the other web services
 
-CollateX:
+### collatex-service
 
 ```bash
 sudo docker pull ghcr.io/betamasaheft/collatex-service
@@ -30,7 +37,7 @@ sudo docker pull ghcr.io/betamasaheft/collatex-service
 sudo docker run -dit -p 8080:8080 -p 8443:8443 --name collatex-service docker pull ghcr.io/betamasaheft/collatex-service
 ```
 
-IIIF:
+### iiif-service
 
 ```bash
 sudo docker pull iipsrv/iipsrv
@@ -38,7 +45,9 @@ sudo docker pull iipsrv/iipsrv
 sudo docker run -it -p 9000:9000 -p 8080:80 -v /home/images/:/images iipsrv/iipsrv
 ```
 
-SPARQL (see the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)):
+### sparql-service
+
+See the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)
 
 ```bash
 sudo docker pull adfreiburg/qlever
@@ -46,6 +55,24 @@ sudo docker pull adfreiburg/qlever
 sudo docker run -it -p 8888:8888 -v /home/triples/:/triples adfreiburg/qlever
 ```
 
+### TBD: counter-service
+
+
+### TBD: expansion-service
+
+
+### TBD: rate-limiting-service
+
+With HA Proxy or Traefik.
+
+
+### TBD: backup-service
+
+This is possible with Komodo.
+
+
+
+### =======================
 
 ### Loading the data
 
