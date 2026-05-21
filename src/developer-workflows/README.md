@@ -10,13 +10,17 @@ Tje configuration files are as follows: [Nginx](https://github.com/BetaMasaheft/
 
 Ideally, all the software needed is installed as Docker containers.
 
+### TBD: Load balancer service
+
+With HA Proxy.
+
 
 ### Nginx
 
 We need a custom made image, with these [configuration files](https://github.com/BetaMasaheft/jinntec/tree/main/nginx). See [https://hub.docker.com/search?q=nginx](https://hub.docker.com/search?q=nginx) for a base image.
 
 
-### eXist-db
+### eXist db
 
 Pull the image and run the container:
 
@@ -29,7 +33,7 @@ sudo docker run -dit -p 8080:8080 -p 8443:8443 --name betamasa ghcr.io/betamasah
   > We have to make sure that the image contains the `conf.xml` located at [https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml](https://github.com/BetaMasaheft/jinntec/blob/main/etc/conf.xml).
 
 
-### collatex-service
+### CollateX service
 
 ```bash
 sudo docker pull ghcr.io/betamasaheft/collatex-service
@@ -37,7 +41,7 @@ sudo docker pull ghcr.io/betamasaheft/collatex-service
 sudo docker run -dit -p 8080:8080 -p 8443:8443 --name collatex-service docker pull ghcr.io/betamasaheft/collatex-service
 ```
 
-### iiif-service
+### IIIF service
 
 ```bash
 sudo docker pull iipsrv/iipsrv
@@ -45,7 +49,7 @@ sudo docker pull iipsrv/iipsrv
 sudo docker run -it -p 9000:9000 -p 8080:80 -v /home/images/:/images iipsrv/iipsrv
 ```
 
-### sparql-service
+### SPARQL service
 
 See the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)
 
@@ -55,20 +59,20 @@ sudo docker pull adfreiburg/qlever
 sudo docker run -it -p 8888:8888 -v /home/triples/:/triples adfreiburg/qlever
 ```
 
-### TBD: counter-service
+### TBD: Counter service
 
 
-### TBD: expansion-service
+### TBD: Expansion service
 
 
-### TBD: rate-limiting-service
+### TBD: Testing service
 
-With HA Proxy or Traefik.
+Consider [betmas-e2e](https://github.com/BetaMasaheft/betmas-e2e).
 
 
-### TBD: backup-service
+### Backup and restore service
 
-This is possible with Komodo.
+Such service is provided by Komodo, see [Backup and Restore](https://komo.do/docs/setup/backup).
 
 
 
