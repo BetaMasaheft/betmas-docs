@@ -59,13 +59,6 @@ The data for this service is periodically updated as follows:
 
 * The service updates the database of the SPARQL endpoint.
 
-See the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)
-
-```bash
-sudo docker pull adfreiburg/qlever
-
-sudo docker run -it -p 8888:8888 -v /home/triples/:/triples adfreiburg/qlever
-```
 
 ### TBD: Counter service
 
