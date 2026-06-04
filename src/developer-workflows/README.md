@@ -57,7 +57,7 @@ The data for this service is periodically updated as follows:
 
 * The service converts the TEI files to Turtle files.
 
-* The service update the database of the SPARQL endpoint.
+* The service updates the database of the SPARQL endpoint.
 
 See the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)
 
