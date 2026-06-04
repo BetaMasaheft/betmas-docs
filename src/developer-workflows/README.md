@@ -51,6 +51,14 @@ sudo docker run -it -p 9000:9000 -p 8080:80 -v /home/images/:/images iipsrv/iips
 
 ### SPARQL service
 
+The data for this service is periodically updated as follows:
+
+* The service picks the latest archive from the Docker volume for backup of the eXist container.
+
+* The service converts the TEI files to Turtle files.
+
+* The service update the database of the SPARQL endpoint.
+
 See the answer from [https://github.com/ad-freiburg/qlever/discussions/2360](https://github.com/ad-freiburg/qlever/discussions/2360)
 
 ```bash
