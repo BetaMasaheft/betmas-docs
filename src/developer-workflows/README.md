@@ -51,13 +51,24 @@ sudo docker run -it -p 9000:9000 -p 8080:80 -v /home/images/:/images iipsrv/iips
 
 ### SPARQL service
 
+The current workflow for providing the data for this service is as follows (the future workflow is below):
+
+* The service picks the latest archive from the folder for backup of the eXist DB.
+
+* The service converts the TEI files to RDF/XML files.
+
+* The service converts the RDF/XML files to Turtle files.
+
+* The service restores the database of the SPARQL endpoint.
+
+
 The data for this service is periodically updated as follows:
 
 * The service picks the latest archive from the Docker volume for backup of the eXist container.
 
 * The service converts the TEI files to Turtle files.
 
-* The service updates the database of the SPARQL endpoint.
+* The service restores the database of the SPARQL endpoint.
 
 
 ### TBD: Counter service
