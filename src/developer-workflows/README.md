@@ -140,7 +140,7 @@ Most data is on GitHub, except expanded data, lists and Dillmann
    * edit /db/apps/BetMasWeb/modules/loc.xqm to read the correct app url
  * Register RestXQ stuff:
    * call `/db/apps/BetMasService/modules/registerRESTXQ.xql`
-   * http://116.202.114.60:8081/exist/apps/BetMasService/modules/registerRESTXQ.xql
+   * <...>/exist/apps/BetMasService/modules/registerRESTXQ.xql
 
 ### Loading data
 
@@ -184,7 +184,7 @@ return
 After that, rsync it to local:
 
 ```
-scp -r bmadmin@betamasaheft2.aai.uni-hamburg.de:/media/add/expanded-data-dump/expanded-data-dump .
+scp -r ***@betamasaheft2.aai.uni-hamburg.de:/media/add/expanded-data-dump/expanded-data-dump .
 ```
 
 Finally deploy it:
