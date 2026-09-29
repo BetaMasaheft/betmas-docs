@@ -1,5 +1,32 @@
 # Developer Workflows
 
+## How to synchronize eXist-db collections to Git repositories
+
+* Clone the Git repository in a convenient folder, let us say to `/home/claudius/_sync/DillmannData`.
+
+* In case eXist-db cannot save files in the repository folder, provide it enough permissions with:
+```shell
+chmod ugo+rwx /home/claudius/_sync/DillmannData
+```
+
+* For eXist before 5.4.0, the XQuery script for synchronizing the data is:
+```xquery
+(
+  file:sync("/db/apps/DillmannData", "/media/add/exist/exist2/_sync/DillmannData", ()),
+  process:execute("rsync -avhn --delete /media/add/exist/exist2/_sync/DillmannData/ /home/claudius/_sync/DillmannData/data/")
+)
+```
+> For `DillmannData` repository, the synchronization is only with the `data` subfolder, in order to preserve the rest of the files located in the root of the repository.
+
+* For eXist 5.4.0+, the XQuery script for synchronizing the data is:
+```xquery
+file:sync("/db/apps/DillmannData", "/home/claudius/_sync/DillmannData/data/", map {
+    "prune": true(),
+    "excludes": (".*")
+})
+```
+> For `DillmannData` repository, the synchronization is only with the `data` subfolder, in order to preserve the rest of the files located in the root of the repository.
+
 
 ## How to migrate BetaMasaHeft to a new server
 
