@@ -3,6 +3,43 @@
 
 ## How to migrate BetaMasaHeft to a new server
 
+For when the current test server with be switched to be the production server, the following steps are to be taken (during switching, the current production server has not to be used by editors):
+
+* Get the latest id-s for all the document types, from [https://betamasaheft.eu:8080/exist/apps/expanded](https://betamasaheft.eu:8080/exist/apps/expanded) and update the counters of the `betmas-id-manager` service.
+
+* Get the latest user accounts and groups, by using the following XQuery script (the script was provided by Martin and updated by me to archive also the user groups), and add them to the `eXist-db` service:
+
+```xquery
+xquery version "3.1";
+
+import module namespace compression = "http://exist-db.org/xquery/compression";
+import module namespace xmldb = "http://exist-db.org/xquery/xmldb";
+
+let $users-zip :=
+    compression:zip(
+        xs:anyURI("/db/system/security/exist/accounts"),
+        true(),                  (: preserve hierarchy :)
+        "/db/system/exist"    (: strip prefix -> entries become "accounts/user.xml" :)
+    )
+let $groups-zip :=
+    compression:zip(
+        xs:anyURI("/db/system/security/exist/groups"),
+        true(),                  (: preserve hierarchy :)
+        "/db/system/exist"    (: strip prefix -> entries become "groups/group.xml" :)
+    )
+    return (
+        xmldb:store("/db", "users-backup.zip", $users-zip, "application/zip"),
+        xmldb:store("/db", "groups-backup.zip", $groups-zip, "application/zip")
+    )
+```
+
+* Get the latest Dillman data, and update its GitHub repository.
+```xquery
+(
+    file:sync("/db/system/security/exist", "/media/add/exist/exist2/_sync/security", ()),
+    file:sync("/db/apps/DillmannData", "/media/add/exist/exist2/_sync/DillmannData", ())
+)
+```
 
 ### Set up a virtual machine
 
