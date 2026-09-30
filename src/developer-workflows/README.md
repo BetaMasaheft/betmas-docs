@@ -11,21 +11,36 @@ chmod ugo+rwx /home/claudius/_sync/DillmannData
 
 * For eXist before 5.4.0, the XQuery script for synchronizing the data is:
 ```xquery
-(
-  file:sync("/db/apps/DillmannData", "/media/add/exist/exist2/_sync/DillmannData", ()),
-  process:execute("rsync -avhn --delete /media/add/exist/exist2/_sync/DillmannData/ /home/claudius/_sync/DillmannData/data/")
-)
+xquery version "3.1";
+
+let $process_execution_options := 
+    <option>
+        <workingDir>/media/add/exist/exist2/_sync/DillmannData/</workingDir>
+    </option>
+                
+return
+    (
+        file:sync("/db/system/security/exist", "/media/add/exist/exist2/_sync/security", ()),
+        file:sync("/db/apps/DillmannData", "/media/add/exist/exist2/_sync/DillmannData", ()),
+        process:execute(("rsync", "-avhn", "--delete", "/media/add/exist/exist2/_sync/DillmannData/", "/home/claudius/_sync/DillmannData/data/"), $process_execution_options)
+    )
 ```
 > For `DillmannData` repository, the synchronization is only with the `data` subfolder, in order to preserve the rest of the files located in the root of the repository.
 
 * For eXist 5.4.0+, the XQuery script for synchronizing the data is:
 ```xquery
+xquery version "3.1";
+
 file:sync("/db/apps/DillmannData", "/home/claudius/_sync/DillmannData/data/", map {
     "prune": true(),
     "excludes": (".*")
 })
 ```
 > For `DillmannData` repository, the synchronization is only with the `data` subfolder, in order to preserve the rest of the files located in the root of the repository.
+> For cleaning the Git repository on the prod server:
+```shell
+git clean -df && git checkout -- .
+```
 
 
 ## How to migrate BetaMasaHeft to a new server
