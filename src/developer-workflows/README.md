@@ -75,12 +75,8 @@ let $groups-zip :=
     )
 ```
 
-* Get the latest Dillman data, and update its GitHub repository.
-```xquery
-(
-    file:sync("/db/system/security/exist", "/media/add/exist/exist2/_sync/security", ()),
-    file:sync("/db/apps/DillmannData", "/media/add/exist/exist2/_sync/DillmannData", ())
-)
+* Get the latest Dillman data (folders `new` and `new-1`, and the `next-id.xml` file), and update its GitHub repository.
+
 ```
 
 ### Set up a virtual machine
