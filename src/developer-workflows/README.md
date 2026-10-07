@@ -1,5 +1,6 @@
 # Developer Workflows
 
+
 ## How to synchronize eXist-db collections to Git repositories
 
 * Clone the Git repository in a convenient folder, let us say to `/home/claudius/_sync/DillmannData`.
@@ -49,7 +50,7 @@ For when the current test server with be switched to be the production server, t
 
 * Get the latest id-s for all the document types, from [https://betamasaheft.eu:8080/exist/apps/expanded](https://betamasaheft.eu:8080/exist/apps/expanded) and update the counters of the `betmas-id-manager` service.
 
-* Get the latest user accounts and groups, by using the following XQuery script (the script was provided by Martin and updated by me to archive also the user groups), and add them to the `eXist-db` service:
+* Get the latest user accounts and groups, by using the following XQuery script (the script was provided by Martin and updated by me to archive also the user groups), and add them to the `eXist-db` service (these XML files should never be modified by hand):
 
 ```xquery
 xquery version "3.1";
@@ -77,7 +78,14 @@ let $groups-zip :=
 
 * Get the latest Dillman data (folders `new` and `new-1`, and the `next-id.xml` file), and update its GitHub repository.
 
-```
+* Trigger the expansion of the data, by using the [re-expand GitHub action](https://github.com/BetaMasaheft/expanded/actions/workflows/re-expand.yml). During the expansion of data, no updates of the data should happen, so no approvals of new pull requests (this is because the expanded data will not correspond anymore to the data in the `expanded` Git repository).
+
+* Disable the web hooks and remove gitsync [dead-code removal legacy gitsync](https://github.com/BetaMasaheft/BetMas/issues/155).
+
+* Komodo, based upon [this Docker compose file](https://github.com/BetaMasaheft/BetMas/blob/master/docker-compose.yml), will deploy everything.
+
+* ??Enable the webhooks.
+
 
 ### Set up a virtual machine
 
