@@ -11,8 +11,9 @@ sudo docker compose exec nginx sh
 * Delete all the files in cache:
 ```shell
 rm -rf /var/cache/nginx/*
-exit 0;
 ```
+
+* Delete the terminal by pressing the `Delete` button.
 
 
 ## How to synchronize eXist-db collections to Git repositories
