@@ -1,6 +1,20 @@
 # Developer Workflows
 
 
+## On demand clearing of NGinx cache
+
+* Access the `nginx` container:
+```shell
+sudo docker compose exec nginx sh
+```
+
+* Delete all the files in cache:
+```shell
+rm -rf /var/cache/nginx/*
+exit 0;
+```
+
+
 ## How to synchronize eXist-db collections to Git repositories
 
 * Clone the Git repository in a convenient folder, let us say to `/home/claudius/_sync/DillmannData`.
@@ -180,6 +194,17 @@ Such service is provided by Komodo, see [Backup and Restore](https://komo.do/doc
 #### The images
 
 #### The RDF data
+
+
+## Clear the Nginx cache
+
+```shell
+#!/bin/bash
+sudo service nginx stop
+sudo rm -rf /var/cache/nginx/*
+sudo service nginx start
+exit 0;
+```
 
 
 <!-- This is no longer true -->
